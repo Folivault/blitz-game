@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>BLITZ — Squad Score Battle</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#07070f;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:0}
+#app{font-family:'DM Sans',sans-serif;background:#0e0e1a;color:#ffffff;width:100%;max-width:440px;margin:0 auto;min-height:100vh;border-left:1px solid #333355;border-right:1px solid #333355;overflow:hidden}
+.screen{display:none;flex-direction:column}
+.screen.active{display:flex}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#1a1a2e;border-bottom:2px solid #333355}
+.topbar-logo{font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;color:#ff3333;letter-spacing:3px}
+.home-btn{background:#2a2a50;border:2px solid #5555aa;border-radius:8px;padding:8px 16px;color:#ffffff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px}
+.home-btn svg{width:13px;height:13px;flex-shrink:0}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:17px 20px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;border-radius:12px;cursor:pointer;border:none;transition:transform 0.1s;color:#ffffff}
+.btn:active{transform:scale(0.96)}
+.btn svg{width:18px;height:18px;flex-shrink:0}
+.btn-red{background:#dd2222}
+.btn-cyan{background:#0088aa}
+.btn-grey{background:#333355;border:2px solid #5555aa}
+.add-btn{background:#1a3322;border:2px solid #44aa66;border-radius:10px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#ffffff;cursor:pointer;white-space:nowrap}
+input[type=text]{background:#1a1a2e;border:2px solid #333366;border-radius:10px;color:#ffffff;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:15px;width:100%;outline:none}
+input[type=text]:focus{border-color:#00aacc}
+input[type=text]::placeholder{color:#6666aa}
+label{font-size:11px;color:#aaaacc;font-weight:700;margin-bottom:6px;display:block;letter-spacing:1px;text-transform:uppercase}
+#landing{align-items:center;text-align:center;padding:36px 28px 32px}
+.logo-big{font-family:'Bebas Neue',Impact,sans-serif;font-size:86px;color:#ff3333;letter-spacing:8px;line-height:1}
+.logo-tag{font-size:11px;letter-spacing:3px;color:#aaaacc;text-transform:uppercase;margin:4px 0 24px}
+.bolt-ring{width:88px;height:88px;border-radius:50%;border:2px solid #ff3333;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.lbtns{display:flex;flex-direction:column;gap:12px;width:100%}
+.inner{padding:20px 20px 28px;display:flex;flex-direction:column;gap:16px}
+.sec-title{font-family:'Bebas Neue',Impact,sans-serif;font-size:28px;letter-spacing:1px;color:#ffffff}
+.ptag{display:flex;align-items:center;justify-content:space-between;background:#1a1a2e;border:2px solid #333355;border-radius:8px;padding:10px 14px;font-size:14px;color:#ffffff;margin-top:6px}
+.rm-btn{width:26px;height:26px;border-radius:50%;background:#4a1a1a;border:2px solid #aa3333;color:#ff8888;cursor:pointer;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.add-row{display:flex;gap:8px;margin-top:8px}
+.add-row input{flex:1}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.chip{padding:8px 14px;border-radius:8px;border:2px solid #333366;background:#1a1a2e;color:#aaaacc;cursor:pointer;font-size:13px;font-weight:700}
+.chip.on{border-color:#00aacc;color:#ffffff;background:rgba(0,170,204,0.15)}
+.stakes-box{background:#111122;border:2px solid #333366;border-radius:12px;padding:16px}
+.stakes-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.divl{height:2px;background:#222240;margin:4px 0}
+.code-box{text-align:center;background:#111122;border:2px solid #333366;border-radius:12px;padding:20px 12px;margin:4px 0}
+.code-val{font-family:'Bebas Neue',Impact,sans-serif;font-size:54px;letter-spacing:8px;color:#00aacc}
+.ss{background:#1a1200;border:2px solid rgba(255,149,0,0.4);border-radius:12px;padding:14px}
+.ss-t{font-size:11px;color:#ffaa33;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.ss-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.si{text-align:center}
+.si-l{font-size:11px;color:#aaaacc;font-weight:700}
+.si-v{font-size:13px;font-weight:700;margin-top:3px}
+.si-v.w{color:#ffdd00}.si-v.l{color:#ff5555}
+.prow{display:flex;align-items:center;gap:12px;background:#111122;border-radius:10px;padding:11px 14px;margin-top:6px}
+.av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.pn{font-size:14px;font-weight:700;color:#ffffff}
+.ps{font-size:11px;color:#aaaacc;margin-top:2px}
+.dt{width:8px;height:8px;border-radius:50%;margin-left:auto;flex-shrink:0}
+.dt.on{background:#00ee77}.dt.off{background:#444466}
+.hud{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#1a1a2e;border-bottom:2px solid #333355}
+.hs{font-family:'Bebas Neue',Impact,sans-serif;font-size:36px;color:#ff3333}
+.hl{font-size:10px;color:#aaaacc;letter-spacing:1px;text-transform:uppercase}
+.hc{text-align:center}
+.cn{font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;color:#ff9900}
+.cn.pop{animation:cpop 0.15s ease-out}
+@keyframes cpop{0%{transform:scale(1.4)}100%{transform:scale(1)}}
+.ht{text-align:right}
+.tn{font-family:'Bebas Neue',Impact,sans-serif;font-size:36px;color:#ffffff}
+.tn.red{color:#ff3333;animation:shk 0.2s infinite}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
+.sdots{display:flex;justify-content:center;gap:4px;margin-top:3px}
+.sdot{width:7px;height:7px;border-radius:50%;background:#333355}
+.sdot.on{background:#ff9900}
+#board{padding:14px 18px;display:flex;flex-direction:column;gap:12px;position:relative}
+.mtag{text-align:center;padding:7px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#ffffff}
+.mtag.blitz{background:rgba(255,60,60,0.25)}
+.mtag.match{background:rgba(0,170,204,0.2)}
+.mtag.order{background:rgba(255,149,0,0.2)}
+.mtag.memory{background:rgba(180,140,255,0.2)}
+.tbox{text-align:center;background:#1a1a2e;border:2px solid #333355;border-radius:14px;padding:14px 12px}
+.tl{font-size:11px;color:#aaaacc;letter-spacing:1px;text-transform:uppercase}
+.tn2{font-family:'Bebas Neue',Impact,sans-serif;font-size:58px;color:#00aacc;line-height:1;margin:2px 0}
+.tgrid{display:grid;gap:8px}
+.tile{aspect-ratio:1;border-radius:12px;border:2px solid #333355;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',Impact,sans-serif;font-size:26px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;transition:transform 0.08s;color:#ffffff}
+.tile:active{transform:scale(0.9)}
+.tile.correct{background:rgba(0,238,120,0.2);border-color:#00ee77;color:#00ee77}
+.tile.wrong{background:rgba(255,60,60,0.2);border-color:#ff3333;animation:tshk 0.25s}
+.tile.sel{background:rgba(0,170,204,0.15);border-color:#00aacc}
+@keyframes tshk{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.fl{position:absolute;font-family:'Bebas Neue',Impact,sans-serif;font-size:20px;pointer-events:none;z-index:10;animation:fup 0.7s ease-out forwards}
+.fl.p{color:#00ee77}.fl.n{color:#ff3333}
+@keyframes fup{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-52px);opacity:0}}
+.gow{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(5,5,20,0.95);display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px;border-radius:12px}
+.gow.show{display:flex;animation:fi 0.3s}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.got{font-family:'Bebas Neue',Impact,sans-serif;font-size:52px;color:#ff3333}
+.gos{font-family:'Bebas Neue',Impact,sans-serif;font-size:76px;color:#ffffff}
+.gobtns{display:flex;flex-direction:column;gap:10px;width:220px;margin-top:8px}
+#rend .inner{align-items:center;text-align:center;width:100%}
+.res{font-family:'Bebas Neue',Impact,sans-serif;font-size:88px;color:#00ee77;line-height:1}
+.ret{font-family:'Bebas Neue',Impact,sans-serif;font-size:30px;color:#ffffff;margin-top:4px}
+.restats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;width:100%;margin-top:16px}
+.restat{background:#111122;border-radius:10px;padding:12px;border:2px solid #333355;text-align:center}
+.resv{font-family:'Bebas Neue',Impact,sans-serif;font-size:26px;color:#ffffff}
+.resl{font-size:11px;color:#aaaacc}
+.aibox{background:rgba(180,140,255,0.1);border:2px solid rgba(180,140,255,0.35);border-radius:10px;padding:12px 14px;font-size:13px;color:#ffffff;width:100%;min-height:44px;text-align:left;line-height:1.6}
+.rebtns{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:10px}
+.lbc{text-align:center;background:#1a0a0a;border:2px solid rgba(255,60,60,0.4);border-radius:10px;padding:10px;color:#ffffff;font-weight:700}
+.lbcv{font-family:'Bebas Neue',Impact,sans-serif;font-size:24px;display:block;color:#ff6666}
+.lbe{display:flex;align-items:center;gap:12px;padding:13px;background:#111122;border-radius:12px;border:2px solid #333355;margin-top:8px}
+.lbe.g{border-color:#ffdd00;background:rgba(255,220,0,0.05)}
+.lbe.s{border-color:#aaaacc}
+.lbe.b{border-color:#cc7733}
+.lbr{font-family:'Bebas Neue',Impact,sans-serif;font-size:20px;min-width:24px;color:#ffffff}
+.lbr.g{color:#ffdd00}.lbr.s{color:#ddddee}.lbr.b{color:#cc7733}
+.lbn{font-weight:700;font-size:14px;flex:1;color:#ffffff}
+.lbs{font-family:'Bebas Neue',Impact,sans-serif;font-size:22px;color:#ff3333}
+.ytag{font-size:11px;padding:2px 7px;border-radius:4px;font-weight:700;margin-left:6px;background:rgba(0,170,204,0.25);color:#00aacc}
+.trbox{background:#1a1200;border:2px solid rgba(255,220,0,0.4);border-radius:12px;padding:14px;margin-top:8px;text-align:center}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- LANDING -->
+<div id="landing" class="screen active">
+  <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:36px 28px 32px">
+    <div class="bolt-ring"><svg width="40" height="40" viewBox="0 0 40 40"><polygon points="22,4 10,22 20,22 18,36 30,18 20,18" fill="#ff3333"/></svg></div>
+    <div class="logo-big">BLITZ</div>
+    <div class="logo-tag">Squad Score Battle</div>
+    <div class="lbtns">
+      <button class="btn btn-red" onclick="go('setup')">
+        <svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3.5" stroke="#fff" stroke-width="2"/><path d="M2 17c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M14 3l3 3-3 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        CREATE SQUAD
+      </button>
+      <button class="btn btn-cyan" onclick="showJoin()">
+        <svg viewBox="0 0 18 18" fill="none"><rect x="2" y="7" width="14" height="10" rx="2" stroke="#fff" stroke-width="2"/><path d="M6 7V5.5a3 3 0 016 0V7" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="12" r="1.8" fill="#fff"/></svg>
+        JOIN WITH CODE
+      </button>
+      <button class="btn btn-grey" onclick="go('solo')">
+        <svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3.5" stroke="#fff" stroke-width="2"/><path d="M2 17c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        SOLO PRACTICE
+      </button>
+    </div>
+    <div style="margin-top:20px;font-size:12px;color:#aaaacc;line-height:1.9">4 game modes &bull; Combo multipliers &bull; Live leaderboard<br>Set stakes — winner rewarded, loser pays up</div>
+  </div>
+</div>
+
+<!-- SETUP -->
+<div id="setup" class="screen">
+  <div class="topbar"><div class="topbar-logo">BLITZ</div><button class="home-btn" onclick="go('landing')"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button></div>
+  <div class="inner">
+    <div class="sec-title">NEW SQUAD</div>
+    <div><label>Your name</label><input type="text" id="host-name" placeholder="Enter your name"/></div>
+    <div><label>Squad name</label><input type="text" id="squad-name" placeholder="e.g. Friday Night Crew"/></div>
+    <div><label>Add players</label><div id="plist2"></div><div class="add-row"><input type="text" id="add-inp" placeholder="Player name" onkeydown="if(event.key==='Enter')addP()"/><button class="add-btn" onclick="addP()">+ ADD</button></div></div>
+    <div><label>Challenge deadline</label><div class="chips"><div class="chip" onclick="selC(this,3600000)">1 hr</div><div class="chip on" onclick="selC(this,21600000)">6 hrs</div><div class="chip" onclick="selC(this,43200000)">12 hrs</div><div class="chip" onclick="selC(this,86400000)">24 hrs</div><div class="chip" onclick="selC(this,172800000)">48 hrs</div></div></div>
+    <div class="stakes-box"><label>The Stakes</label><div class="stakes-row"><div><label>Winner gets</label><input type="text" id="win-prize" placeholder="Dinner paid for"/></div><div><label>Loser must</label><input type="text" id="lose-pen" placeholder="Buy everyone coffee"/></div></div></div>
+    <button class="btn btn-red" onclick="createSquad()"><svg viewBox="0 0 18 18" fill="none"><polygon points="9,1 3,10 8,10 6,17 15,8 10,8" fill="#fff"/></svg>CREATE SQUAD</button>
+  </div>
+</div>
+
+<!-- SOLO -->
+<div id="solo" class="screen">
+  <div class="topbar"><div class="topbar-logo">BLITZ</div><button class="home-btn" onclick="go('landing')"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button></div>
+  <div class="inner">
+    <div class="sec-title">SOLO PRACTICE</div>
+    <div><label>Your name</label><input type="text" id="solo-name" placeholder="Enter your name"/></div>
+    <div style="color:#aaaacc;font-size:13px;line-height:1.9">All 4 modes. Full combos. No pressure.<br>Sharpen your score before the squad battle.</div>
+    <button class="btn btn-red" onclick="startSolo()"><svg viewBox="0 0 18 18" fill="none"><polygon points="5,2 16,9 5,16" fill="#fff"/></svg>START SOLO RUN</button>
+  </div>
+</div>
+
+<!-- LOBBY -->
+<div id="lobby" class="screen">
+  <div class="topbar"><div class="topbar-logo">BLITZ</div><button class="home-btn" onclick="go('landing')"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button></div>
+  <div class="inner">
+    <div class="sec-title">SQUAD LOBBY</div>
+    <div class="code-box"><div style="font-size:11px;color:#aaaacc;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Share this code</div><div class="code-val" id="code-val">----</div><div style="font-size:12px;color:#aaaacc;margin-top:4px">Everyone enters this to join</div></div>
+    <div id="ss-wrap"></div>
+    <div><label>Players (<span id="p-count">0</span>)</label><div id="p-list"></div></div>
+    <div class="divl"></div>
+    <button class="btn btn-red" onclick="startGame()"><svg viewBox="0 0 18 18" fill="none"><polygon points="5,2 16,9 5,16" fill="#fff"/></svg>PLAY MY TURN</button>
+    <button class="btn btn-cyan" onclick="go('lb')" style="margin-top:10px"><svg viewBox="0 0 18 18" fill="none"><rect x="1" y="11" width="4" height="6" rx="1" fill="#fff"/><rect x="7" y="7" width="4" height="10" rx="1" fill="#fff"/><rect x="13" y="2" width="4" height="15" rx="1" fill="#fff"/></svg>VIEW LEADERBOARD</button>
+  </div>
+</div>
+
+<!-- GAME -->
+<div id="game" class="screen">
+  <div class="topbar"><div class="topbar-logo">BLITZ</div><button class="home-btn" onclick="quitGame()"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button></div>
+  <div class="hud">
+    <div><div class="hl">SCORE</div><div class="hs" id="hsc">0</div></div>
+    <div class="hc"><div class="hl">COMBO</div><div class="cn" id="hco">x1</div><div class="sdots" id="sdots"></div></div>
+    <div class="ht"><div class="hl">TIME</div><div class="tn" id="hti">30</div></div>
+  </div>
+  <div id="board">
+    <div class="mtag blitz" id="mtag">BLITZ MODE</div>
+    <div class="tbox"><div class="tl" id="tlabel">TAP THE NUMBER</div><div class="tn2" id="tnum">?</div></div>
+    <div class="tgrid" id="tgrid"></div>
+    <div class="gow" id="gow">
+      <div class="got">TIME'S UP!</div><div class="gos" id="goS">0</div>
+      <div style="color:#aaaacc;font-size:13px;margin-bottom:4px">Final score</div>
+      <div class="gobtns">
+        <button class="btn btn-red" onclick="endGame()"><svg viewBox="0 0 18 18" fill="none"><rect x="1" y="11" width="4" height="6" rx="1" fill="#fff"/><rect x="7" y="7" width="4" height="10" rx="1" fill="#fff"/><rect x="13" y="2" width="4" height="15" rx="1" fill="#fff"/></svg>SEE RESULTS</button>
+        <button class="btn btn-grey" onclick="go('landing')"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROUND END -->
+<div id="rend" class="screen">
+  <div class="topbar"><div class="topbar-logo">BLITZ</div><button class="home-btn" onclick="go('landing')"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button></div>
+  <div class="inner" style="align-items:center;text-align:center">
+    <div class="ret">ROUND COMPLETE</div><div class="res" id="reS">0</div>
+    <div id="reRank" style="font-size:14px;font-weight:700;margin-top:4px;color:#ffffff"></div>
+    <div class="restats">
+      <div class="restat"><div class="resv" id="reC" style="color:#00ee77">0</div><div class="resl">correct</div></div>
+      <div class="restat"><div class="resv" id="reCo" style="color:#ff9900">x1</div><div class="resl">best combo</div></div>
+      <div class="restat"><div class="resv" id="reW" style="color:#ff3333">0</div><div class="resl">misses</div></div>
+    </div>
+    <div class="aibox" id="aiBox">Analyzing your run...</div>
+    <div class="rebtns">
+      <button class="btn btn-red" onclick="startGame()"><svg viewBox="0 0 18 18" fill="none"><polygon points="5,2 16,9 5,16" fill="#fff"/></svg>PLAY AGAIN</button>
+      <button class="btn btn-cyan" onclick="go('lb')"><svg viewBox="0 0 18 18" fill="none"><rect x="1" y="11" width="4" height="6" rx="1" fill="#fff"/><rect x="7" y="7" width="4" height="10" rx="1" fill="#fff"/><rect x="13" y="2" width="4" height="15" rx="1" fill="#fff"/></svg>LEADERBOARD</button>
+      <button class="btn btn-grey" onclick="go('lobby')"><svg viewBox="0 0 18 18" fill="none"><path d="M12 14L7 9l5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>BACK TO LOBBY</button>
+    </div>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="lb" class="screen">
+  <div class="topbar"><div class="topbar-logo">BLITZ</div><button class="home-btn" onclick="go('landing')"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button></div>
+  <div class="inner">
+    <div class="sec-title">LEADERBOARD</div>
+    <div class="lbc">Challenge ends in<br><span class="lbcv" id="lbClock">--:--:--</span></div>
+    <div class="trbox" id="trbox" style="display:none"></div>
+    <div id="lbE"></div>
+    <div class="divl"></div>
+    <button class="btn btn-red" onclick="startGame()"><svg viewBox="0 0 18 18" fill="none"><polygon points="5,2 16,9 5,16" fill="#fff"/></svg>PLAY MY TURN</button>
+    <button class="btn btn-grey" onclick="go('lobby')" style="margin-top:10px"><svg viewBox="0 0 18 18" fill="none"><path d="M12 14L7 9l5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>BACK TO LOBBY</button>
+  </div>
+</div>
+
+</div>
+<script>
+const S={players:[],timerMs:21600000,winPrize:'',losePen:'',code:'',deadlineTs:null,me:'',scores:{},attempts:{},score:0,timeLeft:30,combo:1,streak:0,bestCombo:1,correct:0,wrong:0,mode:'blitz',gi:null,orderSel:[],orderTgt:[],memTgt:null};
+const COLS=['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#c77dff','#ff9f43','#00ccee','#ff6b9d'];
+const AVC=['#ff6b6b','#4d96ff','#6bcb77','#ffd93d','#c77dff','#ff9f43'];
+const MODES=['blitz','match','order','memory'];
+let dlInt=null;
+function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='lb')renderLB();if(id==='lobby')renderLobby();}
+function showJoin(){const c=prompt('Enter squad code:');if(!c)return;const n=prompt('Your name:');if(!n)return;S.code=c.toUpperCase();S.me=n.trim();if(!S.players.includes(S.me))S.players.push(S.me);go('lobby');}
+function selC(el,ms){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');S.timerMs=ms;}
+function addP(){const i=document.getElementById('add-inp');const n=i.value.trim();if(!n||S.players.includes(n)){i.value='';return;}S.players.push(n);i.value='';renderPL();}
+function removeP(n){S.players=S.players.filter(p=>p!==n);renderPL();}
+function renderPL(){document.getElementById('plist2').innerHTML=S.players.map(p=>`<div class="ptag"><span>${p}</span><button class="rm-btn" onclick="removeP('${p}')">&#215;</button></div>`).join('');}
+function createSquad(){const h=document.getElementById('host-name').value.trim();if(!h){alert('Enter your name!');return;}S.me=h;if(!S.players.includes(h))S.players.unshift(h);S.winPrize=document.getElementById('win-prize').value.trim()||'Bragging rights';S.losePen=document.getElementById('lose-pen').value.trim()||'Buy everyone a round';S.code=Math.random().toString(36).substr(2,4).toUpperCase();S.deadlineTs=Date.now()+S.timerMs;S.scores={};S.attempts={};startDL();go('lobby');}
+function startSolo(){const n=document.getElementById('solo-name').value.trim()||'Player';S.me=n;S.players=[n];S.scores={};S.deadlineTs=Date.now()+3600000;S.code='SOLO';startDL();startGame();}
+function renderLobby(){
+  document.getElementById('code-val').textContent=S.code||'----';
+  document.getElementById('p-count').textContent=S.players.length;
+  document.getElementById('p-list').innerHTML=S.players.map((p,i)=>{const c=AVC[i%AVC.length];const ini=p.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);const played=S.scores[p]!==undefined,you=p===S.me;return `<div class="prow"><div class="av" style="background:${c}33;color:${c}">${ini}</div><div style="flex:1"><div class="pn">${p}${you?' <span style="font-size:11px;color:#00aacc">(you)</span>':''}</div><div class="ps">${played?'Score: '+S.scores[p]:'Not played yet'}</div></div><div class="dt ${played?'on':'off'}"></div></div>`;}).join('');
+  const wrap=document.getElementById('ss-wrap');
+  if(S.winPrize||S.losePen){wrap.innerHTML=`<div class="ss"><div class="ss-t">THE STAKES</div><div class="ss-g"><div class="si"><div class="si-l">WINNER GETS</div><div class="si-v w">${S.winPrize||'TBD'}</div></div><div class="si"><div class="si-l">LOSER MUST</div><div class="si-v l">${S.losePen||'TBD'}</div></div></div></div>`;}else wrap.innerHTML='';
+}
+function startDL(){if(dlInt)clearInterval(dlInt);dlInt=setInterval(tickDL,1000);tickDL();}
+function tickDL(){if(!S.deadlineTs)return;const left=Math.max(0,S.deadlineTs-Date.now());const h=Math.floor(left/3600000),m=Math.floor((left%3600000)/60000),sec=Math.floor((left%60000)/1000);const el=document.getElementById('lbClock');if(el)el.textContent=`${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;}
+function startGame(){
+  if(S.gi)clearInterval(S.gi);
+  S.score=0;S.timeLeft=30;S.combo=1;S.streak=0;S.bestCombo=1;S.correct=0;S.wrong=0;S.orderSel=[];S.memTgt=null;
+  S.mode=MODES[Math.floor(Math.random()*MODES.length)];
+  document.getElementById('hsc').textContent='0';document.getElementById('hco').textContent='x1';document.getElementById('hti').textContent='30';document.getElementById('hti').classList.remove('red');document.getElementById('gow').classList.remove('show');
+  updDots();
+  const mt=document.getElementById('mtag');mt.className='mtag '+S.mode;mt.textContent=S.mode.toUpperCase()+' MODE';
+  go('game');genRound();
+  S.gi=setInterval(()=>{S.timeLeft--;const te=document.getElementById('hti');te.textContent=S.timeLeft;if(S.timeLeft<=5)te.classList.add('red');if(S.timeLeft<=0){clearInterval(S.gi);S.gi=null;showGO();}},1000);
+}
+function quitGame(){clearInterval(S.gi);S.gi=null;document.getElementById('gow').classList.remove('show');go('landing');}
+function showGO(){document.getElementById('goS').textContent=S.score;document.getElementById('gow').classList.add('show');}
+function endGame(){
+  clearInterval(S.gi);S.gi=null;
+  S.scores[S.me]=Math.max(S.score,S.scores[S.me]||0);S.attempts[S.me]=(S.attempts[S.me]||0)+1;
+  document.getElementById('reS').textContent=S.score;document.getElementById('reC').textContent=S.correct;document.getElementById('reCo').textContent='x'+S.bestCombo;document.getElementById('reW').textContent=S.wrong;
+  const sorted=getSorted();const rank=sorted.findIndex(x=>x.name===S.me)+1;
+  const rm=document.getElementById('reRank');if(sorted.length>1){rm.textContent=rank===1?"You're in the lead!":'#'+rank+' of '+sorted.length+' players';rm.style.color=rank===1?'#ffdd00':'#aaaacc';}else rm.textContent='';
+  getAI();go('rend');
+}
+function genRound(){if(S.mode==='blitz')gBlitz();else if(S.mode==='match')gMatch();else if(S.mode==='order')gOrder();else gMem();}
+function gBlitz(){
+  const t=Math.floor(Math.random()*9)+1;
+  setEl('tlabel','TAP THE NUMBER');setEl('tnum',String(t));
+  const cols=S.combo>=3?4:3,size=cols*cols;
+  const nums=[t];while(nums.length<size)nums.push(Math.floor(Math.random()*9)+1);shuf(nums);
+  rGrid(cols,nums,(v,el)=>{if(v===t){cor(el);setTimeout(gBlitz,220);}else wrg(el);});
+}
+function gMatch(){
+  const t=Math.floor(Math.random()*14)+4;S.orderSel=[];
+  setEl('tlabel','FIND TWO NUMBERS THAT ADD UP TO');setEl('tnum',String(t));
+  const pairs=[];for(let a=1;a<=9;a++){const b=t-a;if(b>=1&&b<=9&&b!==a)pairs.push([a,b]);}
+  const pair=pairs[Math.floor(Math.random()*pairs.length)]||[3,4];
+  const nums=[...pair];while(nums.length<9)nums.push(Math.floor(Math.random()*9)+1);shuf(nums);
+  rGrid(3,nums,(v,el)=>{
+    S.orderSel.push({v,el});el.classList.add('sel');
+    if(S.orderSel.length===2){const[a,b]=S.orderSel;if(a.v+b.v===t){cor(a.el);cor(b.el);S.orderSel=[];setTimeout(gMatch,300);}else{wrg(a.el);wrg(b.el);S.orderSel=[];setTimeout(()=>document.querySelectorAll('.tile').forEach(x=>x.classList.remove('sel','wrong')),400);}}
+  });
+}
+function gOrder(){
+  const cnt=5+Math.min(S.combo-1,3);const nums=[];
+  while(nums.length<cnt){const n=Math.floor(Math.random()*20)+1;if(!nums.includes(n))nums.push(n);}
+  S.orderTgt=[...nums].sort((a,b)=>a-b);S.orderSel=[];
+  setEl('tlabel','TAP IN ORDER: LOWEST TO HIGHEST');setEl('tnum',S.orderTgt[0]+'...'+S.orderTgt[S.orderTgt.length-1]);shuf(nums);
+  rGrid(3,nums,(v,el)=>{
+    const nxt=S.orderTgt[S.orderSel.length];
+    if(v===nxt){el.classList.add('correct');S.orderSel.push(v);addPts(20);S.correct++;updHud();if(S.orderSel.length===S.orderTgt.length){S.combo=Math.min(S.combo+1,8);S.bestCombo=Math.max(S.bestCombo,S.combo);S.streak++;updCombo();setTimeout(gOrder,300);}}
+    else{wrg(el);S.orderSel=[];setTimeout(()=>document.querySelectorAll('.tile.correct').forEach(x=>x.classList.remove('correct')),400);}
+  });
+}
+function gMem(){
+  const t=Math.floor(Math.random()*9)+1;S.memTgt=t;
+  setEl('tlabel','REMEMBER THIS NUMBER');setEl('tnum',String(t));
+  const nums=[t];while(nums.length<9)nums.push(Math.floor(Math.random()*9)+1);shuf(nums);const saved=[...nums];
+  rGrid(3,saved,()=>{});
+  setTimeout(()=>{
+    setEl('tlabel','NOW FIND IT!');setEl('tnum','?');
+    rGrid(3,saved,(v,el)=>{if(v===S.memTgt){cor(el,true);setTimeout(gMem,300);}else wrg(el);});
+  },Math.max(700,1800-S.combo*150));
+}
+function rGrid(cols,nums,handler){
+  const g=document.getElementById('tgrid');g.style.gridTemplateColumns=`repeat(${cols},1fr)`;g.innerHTML='';
+  nums.forEach(n=>{const tile=document.createElement('div');tile.className='tile';tile.textContent=n;const c=COLS[(n-1)%COLS.length];tile.style.borderColor=c+'66';tile.style.color=c;tile.onclick=()=>{if(!tile.classList.contains('correct')&&!tile.classList.contains('wrong'))handler(n,tile);};g.appendChild(tile);});
+}
+function cor(el,sk){el.classList.add('correct');const pts=10*S.combo;addPts(pts);if(!sk){S.combo=Math.min(S.combo+1,8);S.bestCombo=Math.max(S.bestCombo,S.combo);S.streak++;updCombo();}S.correct++;flt(el,'+'+pts,true);}
+function wrg(el){el.classList.add('wrong');S.combo=1;S.streak=0;S.wrong++;updCombo();addPts(-5);flt(el,'-5',false);setTimeout(()=>el.classList.remove('wrong'),400);}
+function addPts(p){S.score=Math.max(0,S.score+p);updHud();}
+function updHud(){document.getElementById('hsc').textContent=S.score;}
+function updCombo(){const el=document.getElementById('hco');el.textContent='x'+S.combo;el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');updDots();}
+function updDots(){const c=document.getElementById('sdots');c.innerHTML='';for(let i=0;i<5;i++){const d=document.createElement('div');d.className='sdot'+(i<S.streak%5?' on':'');c.appendChild(d);}}
+function flt(el,txt,pos){const b=document.getElementById('board');const rb=el.getBoundingClientRect(),bb=b.getBoundingClientRect();const f=document.createElement('div');f.className='fl '+(pos?'p':'n');f.textContent=txt;f.style.left=(rb.left-bb.left+rb.width/2-12)+'px';f.style.top=(rb.top-bb.top)+'px';b.appendChild(f);setTimeout(()=>{if(f.parentNode)f.parentNode.removeChild(f);},700);}
+function setEl(id,v){document.getElementById(id).textContent=v;}
+function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+function getSorted(){return[...new Set([...S.players,S.me])].filter(p=>S.scores[p]!==undefined).map(p=>({name:p,score:S.scores[p],att:S.attempts[p]||0})).sort((a,b)=>b.score-a.score);}
+function renderLB(){
+  tickDL();const sorted=getSorted();const rk=['g','s','b'],rl=['1','2','3'];
+  document.getElementById('lbE').innerHTML=sorted.length?sorted.map((s,i)=>`<div class="lbe ${rk[i]||''}"><div class="lbr ${rk[i]||''}">${rl[i]||i+1}</div><div style="flex:1"><div class="lbn">${s.name}${s.name===S.me?'<span class="ytag">YOU</span>':''}</div><div style="font-size:11px;color:#aaaacc">${s.att} attempt${s.att!==1?'s':''}</div></div><div class="lbs">${s.score}</div></div>`).join(''):'<div style="color:#aaaacc;font-size:14px;text-align:center;padding:24px">No scores yet — be first to play!</div>';
+  const tb=document.getElementById('trbox');
+  if(sorted.length>=2){tb.style.display='';const w=sorted[0],l=sorted[sorted.length-1];tb.innerHTML=`<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ffdd00;margin-bottom:6px">STANDINGS</div><div style="font-size:13px;color:#ffdd00;font-weight:700">Leading: ${w.name} — ${S.winPrize||'Bragging rights'}</div><div style="font-size:13px;color:#ff5555;font-weight:700;margin-top:4px">Last place: ${l.name} — ${S.losePen||'Pay up'}</div>`;}else tb.style.display='none';
+}
+async function getAI(){
+  const box=document.getElementById('aiBox');box.textContent='Analyzing your run...';
+  const mn={blitz:'number matching',match:'sum finding',order:'sequential ordering',memory:'memory recall'};
+  const p=`Player finished a mobile reaction game. Score=${S.score}, correct=${S.correct}, misses=${S.wrong}, best combo=x${S.bestCombo}, mode=${mn[S.mode]}. Write ONE punchy coaching tip, max 18 words. Be specific and a bit savage, end motivating. No emoji.`;
+  try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:80,messages:[{role:'user',content:p}]})});const d=await r.json();box.textContent=d.content?.[0]?.text||'Decent run. Now do it faster.';}
+  catch(e){const f=['Combos are free points — stop resetting them.','Accuracy first, speed second. Always.','That miss cost more than you think.','You have the instincts. Now trust them.'];box.textContent=f[Math.floor(Math.random()*f.length)];}
+}
+</script>
+</body>
+</html>
