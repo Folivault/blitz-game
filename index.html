@@ -27,7 +27,7 @@ input[type=number]{-moz-appearance:textfield}
 input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 label{font-size:11px;color:#aaaacc;font-weight:700;margin-bottom:6px;display:block;letter-spacing:1px;text-transform:uppercase}
 #landing{align-items:center;text-align:center;overflow-y:auto;height:100vh}
-#landing > div{padding:36px 28px 48px;display:flex;flex-direction:column;align-items:center;width:100%}
+#landing>div{padding:36px 28px 48px;display:flex;flex-direction:column;align-items:center;width:100%}
 .logo-big{font-family:'Bebas Neue',Impact,sans-serif;font-size:86px;color:#ff3333;letter-spacing:8px;line-height:1}
 .logo-tag{font-size:11px;letter-spacing:3px;color:#aaaacc;text-transform:uppercase;margin:4px 0 24px}
 .bolt-ring{width:88px;height:88px;border-radius:50%;border:2px solid #ff3333;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;animation:pulse 1.8s ease-in-out infinite}
@@ -44,17 +44,27 @@ label{font-size:11px;color:#aaaacc;font-weight:700;margin-bottom:6px;display:blo
 .chip.on{border-color:#00aacc;color:#ffffff;background:rgba(0,170,204,0.15)}
 .divl{height:2px;background:#222240;margin:4px 0}
 .bet-box{background:#111a00;border:2px solid #88bb00;border-radius:12px;padding:16px}
-.bet-box label{color:#bbdd44}
+.bet-box>label{color:#bbdd44}
 .currency-wrap{position:relative;margin-top:6px}
 .currency-wrap .sym{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;font-weight:700;color:#aaaacc;pointer-events:none}
 .currency-wrap input{padding-left:30px}
-.pot-banner{background:linear-gradient(135deg,#1a1400,#252000);border:2px solid #ffdd00;border-radius:14px;padding:18px;text-align:center}
+.stakes-box{background:#140a1a;border:2px solid #7755aa;border-radius:12px;padding:16px}
+.stakes-box>label{color:#cc99ff}
+.stakes-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.pot-banner{background:#1a1400;border:2px solid #ffdd00;border-radius:14px;padding:18px;text-align:center}
 .pot-label{font-size:11px;color:#aaaacc;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
 .pot-amount{font-family:'Bebas Neue',Impact,sans-serif;font-size:64px;color:#ffdd00;line-height:1}
 .pot-sub{font-size:12px;color:#aaaacc;margin-top:4px}
 .pot-chips{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-top:10px}
 .pot-chip{padding:4px 10px;border-radius:6px;background:#2a2000;border:1px solid #554400;font-size:12px;color:#ffdd00;font-weight:700}
-.winner-banner{background:linear-gradient(135deg,#1a1400,#2a1800);border:2px solid #ffdd00;border-radius:14px;padding:20px;text-align:center;width:100%}
+.stakes-strip{background:#140a1a;border:2px solid rgba(180,140,255,0.45);border-radius:12px;padding:14px}
+.stakes-strip-title{font-size:11px;color:#cc99ff;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+.stakes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.si{text-align:center}
+.si-l{font-size:11px;color:#aaaacc;font-weight:700;margin-bottom:4px}
+.si-v{font-size:14px;font-weight:700}
+.si-v.w{color:#ffdd00}.si-v.l{color:#ff5555}
+.winner-banner{background:#1a1400;border:2px solid #ffdd00;border-radius:14px;padding:20px;text-align:center;width:100%}
 .winner-label{font-size:11px;color:#aaaacc;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
 .winner-name{font-family:'Bebas Neue',Impact,sans-serif;font-size:38px;color:#ffdd00;line-height:1.1}
 .winner-takes{font-family:'Bebas Neue',Impact,sans-serif;font-size:52px;color:#ffffff;margin-top:4px}
@@ -123,6 +133,7 @@ label{font-size:11px;color:#aaaacc;font-weight:700;margin-bottom:6px;display:blo
 </head>
 <body>
 <div id="app">
+
 <div id="landing" class="screen active">
   <div>
     <div class="bolt-ring"><svg width="40" height="40" viewBox="0 0 40 40"><polygon points="22,4 10,22 20,22 18,36 30,18 20,18" fill="#ff3333"/></svg></div>
@@ -142,18 +153,22 @@ label{font-size:11px;color:#aaaacc;font-weight:700;margin-bottom:6px;display:blo
         SOLO PRACTICE
       </button>
     </div>
-    <div style="margin-top:20px;font-size:12px;color:#aaaacc;line-height:1.9">4 game modes &bull; Combo multipliers &bull; Winner takes the pot</div>
+    <div style="margin-top:20px;font-size:12px;color:#aaaacc;line-height:1.9">4 game modes &bull; Combo multipliers &bull; Set stakes &bull; Winner takes the pot</div>
   </div>
 </div>
+
 <div id="setup" class="screen">
   <div class="topbar"><div class="topbar-logo">BLITZ</div><button class="home-btn" onclick="go('landing')"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button></div>
   <div class="inner">
     <div class="sec-title">NEW SQUAD</div>
     <div><label>Your name</label><input type="text" id="host-name" placeholder="Enter your name"/></div>
-    <div><label>Add players</label><div id="plist2"></div>
+    <div>
+      <label>Add players</label>
+      <div id="plist2"></div>
       <div class="add-row"><input type="text" id="add-inp" placeholder="Player name" onkeydown="if(event.key==='Enter')addP()"/><button class="add-btn" onclick="addP()">+ ADD</button></div>
     </div>
-    <div><label>Challenge deadline</label>
+    <div>
+      <label>Challenge deadline</label>
       <div class="chips">
         <div class="chip" onclick="selC(this,3600000)">1 hr</div>
         <div class="chip on" onclick="selC(this,21600000)">6 hrs</div>
@@ -163,14 +178,23 @@ label{font-size:11px;color:#aaaacc;font-weight:700;margin-bottom:6px;display:blo
       </div>
     </div>
     <div class="bet-box">
-      <label>&#128176; Buy-in per player (USD)</label>
+      <label>&#128176; Cash Buy-in per Player (USD)</label>
       <div style="font-size:12px;color:#aaaacc;margin-bottom:10px">Everyone pays this. Highest score wins the full pot.</div>
       <div class="currency-wrap"><span class="sym">$</span><input type="number" id="buy-in" placeholder="0.00" min="0" step="0.01" oninput="updatePotPreview()"/></div>
       <div id="pot-preview" style="margin-top:10px;font-size:13px;text-align:center;min-height:20px"></div>
     </div>
+    <div class="stakes-box">
+      <label>&#127942; Winner &amp; Loser Stakes (optional)</label>
+      <div style="font-size:12px;color:#aaaacc;margin-bottom:4px">Set a fun consequence on top of the pot.</div>
+      <div class="stakes-row">
+        <div><label style="color:#ffdd00">Winner gets</label><input type="text" id="win-prize" placeholder="e.g. free dinner"/></div>
+        <div><label style="color:#ff5555">Loser must</label><input type="text" id="lose-pen" placeholder="e.g. next round on them"/></div>
+      </div>
+    </div>
     <button class="btn btn-red" onclick="createSquad()"><svg viewBox="0 0 18 18" fill="none"><polygon points="9,1 3,10 8,10 6,17 15,8 10,8" fill="#fff"/></svg>CREATE SQUAD</button>
   </div>
 </div>
+
 <div id="solo" class="screen">
   <div class="topbar"><div class="topbar-logo">BLITZ</div><button class="home-btn" onclick="go('landing')"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button></div>
   <div class="inner">
@@ -180,18 +204,21 @@ label{font-size:11px;color:#aaaacc;font-weight:700;margin-bottom:6px;display:blo
     <button class="btn btn-red" onclick="startSolo()"><svg viewBox="0 0 18 18" fill="none"><polygon points="5,2 16,9 5,16" fill="#fff"/></svg>START SOLO RUN</button>
   </div>
 </div>
+
 <div id="lobby" class="screen">
   <div class="topbar"><div class="topbar-logo">BLITZ</div><button class="home-btn" onclick="go('landing')"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button></div>
   <div class="inner">
     <div class="sec-title">SQUAD LOBBY</div>
     <div class="code-box"><div style="font-size:11px;color:#aaaacc;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Share this code</div><div class="code-val" id="code-val">----</div><div style="font-size:12px;color:#aaaacc;margin-top:4px">Everyone enters this to join</div></div>
     <div id="pot-lobby"></div>
+    <div id="stakes-lobby"></div>
     <div><label>Players (<span id="p-count">0</span>)</label><div id="p-list"></div></div>
     <div class="divl"></div>
     <button class="btn btn-red" onclick="startGame()"><svg viewBox="0 0 18 18" fill="none"><polygon points="5,2 16,9 5,16" fill="#fff"/></svg>PLAY MY TURN</button>
     <button class="btn btn-cyan" onclick="go('lb')" style="margin-top:10px"><svg viewBox="0 0 18 18" fill="none"><rect x="1" y="11" width="4" height="6" rx="1" fill="#fff"/><rect x="7" y="7" width="4" height="10" rx="1" fill="#fff"/><rect x="13" y="2" width="4" height="15" rx="1" fill="#fff"/></svg>VIEW LEADERBOARD</button>
   </div>
 </div>
+
 <div id="game" class="screen">
   <div class="topbar"><div class="topbar-logo">BLITZ</div><button class="home-btn" onclick="quitGame()"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button></div>
   <div class="hud">
@@ -213,6 +240,7 @@ label{font-size:11px;color:#aaaacc;font-weight:700;margin-bottom:6px;display:blo
     </div>
   </div>
 </div>
+
 <div id="rend" class="screen">
   <div class="topbar"><div class="topbar-logo">BLITZ</div><button class="home-btn" onclick="go('landing')"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button></div>
   <div class="inner" style="align-items:center;text-align:center">
@@ -224,8 +252,9 @@ label{font-size:11px;color:#aaaacc;font-weight:700;margin-bottom:6px;display:blo
       <div class="restat"><div class="resv" id="reCo" style="color:#ff9900">x1</div><div class="resl">best combo</div></div>
       <div class="restat"><div class="resv" id="reW" style="color:#ff3333">0</div><div class="resl">misses</div></div>
     </div>
-    <div id="pot-rend" style="width:100%;margin-top:4px"></div>
-    <div class="aibox" id="aiBox">Analyzing your run...</div>
+    <div id="pot-rend" style="width:100%;margin-top:8px"></div>
+    <div id="stakes-rend" style="width:100%;margin-top:4px"></div>
+    <div class="aibox" id="aiBox" style="margin-top:8px">Analyzing your run...</div>
     <div class="rebtns">
       <button class="btn btn-red" onclick="startGame()"><svg viewBox="0 0 18 18" fill="none"><polygon points="5,2 16,9 5,16" fill="#fff"/></svg>PLAY AGAIN</button>
       <button class="btn btn-cyan" onclick="go('lb')"><svg viewBox="0 0 18 18" fill="none"><rect x="1" y="11" width="4" height="6" rx="1" fill="#fff"/><rect x="7" y="7" width="4" height="10" rx="1" fill="#fff"/><rect x="13" y="2" width="4" height="15" rx="1" fill="#fff"/></svg>LEADERBOARD</button>
@@ -233,12 +262,14 @@ label{font-size:11px;color:#aaaacc;font-weight:700;margin-bottom:6px;display:blo
     </div>
   </div>
 </div>
+
 <div id="lb" class="screen">
   <div class="topbar"><div class="topbar-logo">BLITZ</div><button class="home-btn" onclick="go('landing')"><svg viewBox="0 0 14 14" fill="none"><path d="M1 7L7 1l6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="7" width="8" height="6" rx="1" stroke="#fff" stroke-width="2"/></svg>HOME</button></div>
   <div class="inner">
     <div class="sec-title">LEADERBOARD</div>
     <div class="lbc">Challenge ends in<br><span class="lbcv" id="lbClock">--:--:--</span></div>
     <div id="pot-lb"></div>
+    <div id="stakes-lb"></div>
     <div class="trbox" id="trbox" style="display:none"></div>
     <div id="lbE"></div>
     <div class="divl"></div>
@@ -246,9 +277,10 @@ label{font-size:11px;color:#aaaacc;font-weight:700;margin-bottom:6px;display:blo
     <button class="btn btn-grey" onclick="go('lobby')" style="margin-top:10px"><svg viewBox="0 0 18 18" fill="none"><path d="M12 14L7 9l5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>BACK TO LOBBY</button>
   </div>
 </div>
+
 </div>
 <script>
-const S={players:[],timerMs:21600000,code:'',deadlineTs:null,me:'',scores:{},attempts:{},buyIn:0,score:0,timeLeft:30,combo:1,streak:0,bestCombo:1,correct:0,wrong:0,mode:'blitz',gi:null,orderSel:[],orderTgt:[],memTgt:null};
+const S={players:[],timerMs:21600000,winPrize:'',losePen:'',code:'',deadlineTs:null,me:'',scores:{},attempts:{},buyIn:0,score:0,timeLeft:30,combo:1,streak:0,bestCombo:1,correct:0,wrong:0,mode:'blitz',gi:null,orderSel:[],orderTgt:[],memTgt:null};
 const COLS=['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#c77dff','#ff9f43','#00ccee','#ff6b9d'];
 const AVC=['#ff6b6b','#4d96ff','#6bcb77','#ffd93d','#c77dff','#ff9f43'];
 const MODES=['blitz','match','order','memory'];
@@ -262,9 +294,7 @@ function updatePotPreview(){
 }
 function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const el=document.getElementById(id);
-  el.classList.add('active');
-  el.scrollTop=0;
+  const el=document.getElementById(id);el.classList.add('active');el.scrollTop=0;
   if(id==='lb')renderLB();
   if(id==='lobby')renderLobby();
 }
@@ -276,15 +306,15 @@ function renderPL(){document.getElementById('plist2').innerHTML=S.players.map(p=
 function createSquad(){
   const h=document.getElementById('host-name').value.trim();
   if(!h){alert('Enter your name!');return;}
-  S.me=h;
-  if(!S.players.includes(h))S.players.unshift(h);
+  S.me=h;if(!S.players.includes(h))S.players.unshift(h);
   S.buyIn=parseFloat(document.getElementById('buy-in').value)||0;
+  S.winPrize=document.getElementById('win-prize').value.trim();
+  S.losePen=document.getElementById('lose-pen').value.trim();
   S.code=Math.random().toString(36).substr(2,4).toUpperCase();
-  S.deadlineTs=Date.now()+S.timerMs;
-  S.scores={};S.attempts={};
+  S.deadlineTs=Date.now()+S.timerMs;S.scores={};S.attempts={};
   startDL();go('lobby');
 }
-function startSolo(){const n=document.getElementById('solo-name').value.trim()||'Player';S.me=n;S.players=[n];S.scores={};S.buyIn=0;S.deadlineTs=Date.now()+3600000;S.code='SOLO';startDL();startGame();}
+function startSolo(){const n=document.getElementById('solo-name').value.trim()||'Player';S.me=n;S.players=[n];S.scores={};S.buyIn=0;S.winPrize='';S.losePen='';S.deadlineTs=Date.now()+3600000;S.code='SOLO';startDL();startGame();}
 function renderPotBanner(targetId){
   const el=document.getElementById(targetId);if(!el)return;
   if(S.buyIn<=0){el.innerHTML='';return;}
@@ -292,6 +322,11 @@ function renderPotBanner(targetId){
   const chips=S.players.map(p=>`<span class="pot-chip">${p}: ${fmt(S.buyIn)}</span>`).join('');
   const leaderLine=sorted.length>0?`<div style="margin-top:10px;font-size:12px;color:#aaaacc">Leader: <span style="color:#ffdd00;font-weight:700">${sorted[0].name}</span></div>`:'';
   el.innerHTML=`<div class="pot-banner"><div class="pot-label">&#128176; Total Pot</div><div class="pot-amount">${fmt(pot)}</div><div class="pot-sub">${fmt(S.buyIn)} x ${S.players.length} players — winner takes all</div><div class="pot-chips">${chips}</div>${leaderLine}</div>`;
+}
+function renderStakesStrip(targetId){
+  const el=document.getElementById(targetId);if(!el)return;
+  if(!S.winPrize&&!S.losePen){el.innerHTML='';return;}
+  el.innerHTML=`<div class="stakes-strip"><div class="stakes-strip-title">&#127942; The Stakes</div><div class="stakes-grid"><div class="si"><div class="si-l">WINNER GETS</div><div class="si-v w">${S.winPrize||'—'}</div></div><div class="si"><div class="si-l">LOSER MUST</div><div class="si-v l">${S.losePen||'—'}</div></div></div></div>`;
 }
 function renderLobby(){
   document.getElementById('code-val').textContent=S.code||'----';
@@ -302,13 +337,33 @@ function renderLobby(){
     return `<div class="prow"><div class="av" style="background:${c}33;color:${c}">${ini}</div><div style="flex:1"><div class="pn">${p}${you?' <span style="font-size:11px;color:#00aacc">(you)</span>':''}</div><div class="ps">${played?'Score: '+S.scores[p]:'Not played yet'}</div></div><div class="dt ${played?'on':'off'}"></div></div>`;
   }).join('');
   renderPotBanner('pot-lobby');
+  renderStakesStrip('stakes-lobby');
 }
 function startDL(){if(dlInt)clearInterval(dlInt);dlInt=setInterval(tickDL,1000);tickDL();}
 function tickDL(){if(!S.deadlineTs)return;const left=Math.max(0,S.deadlineTs-Date.now());const h=Math.floor(left/3600000),m=Math.floor((left%3600000)/60000),sec=Math.floor((left%60000)/1000);const el=document.getElementById('lbClock');if(el)el.textContent=`${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;}
-function startGame(){if(S.gi)clearInterval(S.gi);S.score=0;S.timeLeft=30;S.combo=1;S.streak=0;S.bestCombo=1;S.correct=0;S.wrong=0;S.orderSel=[];S.memTgt=null;S.mode=MODES[Math.floor(Math.random()*MODES.length)];document.getElementById('hsc').textContent='0';document.getElementById('hco').textContent='x1';document.getElementById('hti').textContent='30';document.getElementById('hti').classList.remove('red');document.getElementById('gow').classList.remove('show');updDots();const mt=document.getElementById('mtag');mt.className='mtag '+S.mode;mt.textContent=S.mode.toUpperCase()+' MODE';go('game');genRound();S.gi=setInterval(()=>{S.timeLeft--;const te=document.getElementById('hti');te.textContent=S.timeLeft;if(S.timeLeft<=5)te.classList.add('red');if(S.timeLeft<=0){clearInterval(S.gi);S.gi=null;showGO();}},1000);}
+function startGame(){
+  if(S.gi)clearInterval(S.gi);
+  S.score=0;S.timeLeft=30;S.combo=1;S.streak=0;S.bestCombo=1;S.correct=0;S.wrong=0;S.orderSel=[];S.memTgt=null;
+  S.mode=MODES[Math.floor(Math.random()*MODES.length)];
+  document.getElementById('hsc').textContent='0';document.getElementById('hco').textContent='x1';document.getElementById('hti').textContent='30';document.getElementById('hti').classList.remove('red');document.getElementById('gow').classList.remove('show');
+  updDots();const mt=document.getElementById('mtag');mt.className='mtag '+S.mode;mt.textContent=S.mode.toUpperCase()+' MODE';
+  go('game');genRound();
+  S.gi=setInterval(()=>{S.timeLeft--;const te=document.getElementById('hti');te.textContent=S.timeLeft;if(S.timeLeft<=5)te.classList.add('red');if(S.timeLeft<=0){clearInterval(S.gi);S.gi=null;showGO();}},1000);
+}
 function quitGame(){clearInterval(S.gi);S.gi=null;document.getElementById('gow').classList.remove('show');go('landing');}
 function showGO(){document.getElementById('goS').textContent=S.score;document.getElementById('gow').classList.add('show');}
-function endGame(){clearInterval(S.gi);S.gi=null;S.scores[S.me]=Math.max(S.score,S.scores[S.me]||0);S.attempts[S.me]=(S.attempts[S.me]||0)+1;document.getElementById('reS').textContent=S.score;document.getElementById('reC').textContent=S.correct;document.getElementById('reCo').textContent='x'+S.bestCombo;document.getElementById('reW').textContent=S.wrong;const sorted=getSorted();const rank=sorted.findIndex(x=>x.name===S.me)+1;const rm=document.getElementById('reRank');if(sorted.length>1){rm.textContent=rank===1?"You're leading!":'#'+rank+' of '+sorted.length;rm.style.color=rank===1?'#ffdd00':'#aaaacc';}else rm.textContent='';const pr=document.getElementById('pot-rend');if(S.buyIn>0&&sorted.length>0){const leader=sorted[0];const mine=leader.name===S.me;pr.innerHTML=`<div class="pot-banner" style="margin-bottom:4px"><div class="pot-label">&#128176; Pot</div><div class="pot-amount" style="font-size:44px">${fmt(getPot())}</div><div style="margin-top:8px;font-size:13px">${mine?'<span style="color:#ffdd00;font-weight:700">You are winning the pot!</span>':`<span style="color:#aaaacc">Leader: <span style="color:#ffdd00;font-weight:700">${leader.name}</span></span>`}</div></div>`;}else pr.innerHTML='';getAI();go('rend');}
+function endGame(){
+  clearInterval(S.gi);S.gi=null;
+  S.scores[S.me]=Math.max(S.score,S.scores[S.me]||0);S.attempts[S.me]=(S.attempts[S.me]||0)+1;
+  document.getElementById('reS').textContent=S.score;document.getElementById('reC').textContent=S.correct;document.getElementById('reCo').textContent='x'+S.bestCombo;document.getElementById('reW').textContent=S.wrong;
+  const sorted=getSorted();const rank=sorted.findIndex(x=>x.name===S.me)+1;
+  const rm=document.getElementById('reRank');
+  if(sorted.length>1){rm.textContent=rank===1?"You're leading!":'#'+rank+' of '+sorted.length;rm.style.color=rank===1?'#ffdd00':'#aaaacc';}else rm.textContent='';
+  const pr=document.getElementById('pot-rend');
+  if(S.buyIn>0&&sorted.length>0){const leader=sorted[0];const mine=leader.name===S.me;pr.innerHTML=`<div class="pot-banner"><div class="pot-label">&#128176; Pot</div><div class="pot-amount" style="font-size:44px">${fmt(getPot())}</div><div style="margin-top:8px;font-size:13px">${mine?'<span style="color:#ffdd00;font-weight:700">You are winning the pot!</span>':`<span style="color:#aaaacc">Leader: <span style="color:#ffdd00;font-weight:700">${leader.name}</span></span>`}</div></div>`;}else pr.innerHTML='';
+  renderStakesStrip('stakes-rend');
+  getAI();go('rend');
+}
 function genRound(){if(S.mode==='blitz')gBlitz();else if(S.mode==='match')gMatch();else if(S.mode==='order')gOrder();else gMem();}
 function gBlitz(){const t=Math.floor(Math.random()*9)+1;setEl('tlabel','TAP THE NUMBER');setEl('tnum',String(t));const cols=S.combo>=3?4:3,size=cols*cols;const nums=[t];while(nums.length<size)nums.push(Math.floor(Math.random()*9)+1);shuf(nums);rGrid(cols,nums,(v,el)=>{if(v===t){cor(el);setTimeout(gBlitz,220);}else wrg(el);});}
 function gMatch(){const t=Math.floor(Math.random()*14)+4;S.orderSel=[];setEl('tlabel','FIND TWO NUMBERS THAT ADD UP TO');setEl('tnum',String(t));const pairs=[];for(let a=1;a<=9;a++){const b=t-a;if(b>=1&&b<=9&&b!==a)pairs.push([a,b]);}const pair=pairs[Math.floor(Math.random()*pairs.length)]||[3,4];const nums=[...pair];while(nums.length<9)nums.push(Math.floor(Math.random()*9)+1);shuf(nums);rGrid(3,nums,(v,el)=>{S.orderSel.push({v,el});el.classList.add('sel');if(S.orderSel.length===2){const[a,b]=S.orderSel;if(a.v+b.v===t){cor(a.el);cor(b.el);S.orderSel=[];setTimeout(gMatch,300);}else{wrg(a.el);wrg(b.el);S.orderSel=[];setTimeout(()=>document.querySelectorAll('.tile').forEach(x=>x.classList.remove('sel','wrong')),400);}}});}
@@ -325,7 +380,17 @@ function flt(el,txt,pos){const b=document.getElementById('board');const rb=el.ge
 function setEl(id,v){document.getElementById(id).textContent=v;}
 function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
 function getSorted(){return[...new Set([...S.players,S.me])].filter(p=>S.scores[p]!==undefined).map(p=>({name:p,score:S.scores[p],att:S.attempts[p]||0})).sort((a,b)=>b.score-a.score);}
-function renderLB(){tickDL();const sorted=getSorted();const rk=['g','s','b'],rl=['1','2','3'];renderPotBanner('pot-lb');const tb=document.getElementById('trbox');if(sorted.length>=2){const winner=sorted[0];if(S.buyIn>0){tb.style.display='';tb.innerHTML=`<div class="winner-banner"><div style="font-size:32px;margin-bottom:4px">&#127942;</div><div class="winner-label">Current Leader</div><div class="winner-name">${winner.name}</div><div class="winner-takes">${fmt(getPot())}</div><div class="winner-sub">winner takes all</div></div>`;}else{tb.style.display='';tb.innerHTML=`<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ffdd00;margin-bottom:6px">STANDINGS</div><div style="font-size:13px;color:#ffdd00;font-weight:700">Leading: ${winner.name}</div><div style="font-size:13px;color:#ff5555;font-weight:700;margin-top:4px">Last: ${sorted[sorted.length-1].name}</div>`;}}else tb.style.display='none';document.getElementById('lbE').innerHTML=sorted.length?sorted.map((s,i)=>`<div class="lbe ${rk[i]||''}"><div class="lbr ${rk[i]||''}">${rl[i]||i+1}</div><div style="flex:1"><div class="lbn">${s.name}${s.name===S.me?'<span class="ytag">YOU</span>':''}</div><div style="font-size:11px;color:#aaaacc">${s.att} attempt${s.att!==1?'s':''}</div></div><div style="text-align:right"><div class="lbs">${s.score}</div>${S.buyIn>0&&i===0?`<div style="font-size:11px;color:#ffdd00;font-weight:700">wins ${fmt(getPot())}</div>`:''}</div></div>`).join(''):'<div style="color:#aaaacc;font-size:14px;text-align:center;padding:24px">No scores yet — be first to play!</div>';}
+function renderLB(){
+  tickDL();const sorted=getSorted();const rk=['g','s','b'],rl=['1','2','3'];
+  renderPotBanner('pot-lb');renderStakesStrip('stakes-lb');
+  const tb=document.getElementById('trbox');
+  if(sorted.length>=2){
+    const winner=sorted[0];tb.style.display='';
+    if(S.buyIn>0){tb.innerHTML=`<div class="winner-banner"><div style="font-size:32px;margin-bottom:4px">&#127942;</div><div class="winner-label">Current Leader</div><div class="winner-name">${winner.name}</div><div class="winner-takes">${fmt(getPot())}</div><div class="winner-sub">winner takes all${S.winPrize?' + '+S.winPrize:''}</div>${S.losePen?`<div style="font-size:12px;color:#ff5555;margin-top:4px">Loser must: ${S.losePen}</div>`:''}</div>`;}
+    else{tb.innerHTML=`<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ffdd00;margin-bottom:6px">STANDINGS</div><div style="font-size:13px;color:#ffdd00;font-weight:700">Leading: ${winner.name}${S.winPrize?' — '+S.winPrize:''}</div><div style="font-size:13px;color:#ff5555;font-weight:700;margin-top:4px">Last: ${sorted[sorted.length-1].name}${S.losePen?' — '+S.losePen:''}</div>`;}
+  }else tb.style.display='none';
+  document.getElementById('lbE').innerHTML=sorted.length?sorted.map((s,i)=>`<div class="lbe ${rk[i]||''}"><div class="lbr ${rk[i]||''}">${rl[i]||i+1}</div><div style="flex:1"><div class="lbn">${s.name}${s.name===S.me?'<span class="ytag">YOU</span>':''}</div><div style="font-size:11px;color:#aaaacc">${s.att} attempt${s.att!==1?'s':''}</div></div><div style="text-align:right"><div class="lbs">${s.score}</div>${S.buyIn>0&&i===0?`<div style="font-size:11px;color:#ffdd00;font-weight:700">wins ${fmt(getPot())}</div>`:''}</div></div>`).join(''):'<div style="color:#aaaacc;font-size:14px;text-align:center;padding:24px">No scores yet — be first to play!</div>';
+}
 async function getAI(){const box=document.getElementById('aiBox');box.textContent='Analyzing your run...';const mn={blitz:'number matching',match:'sum finding',order:'sequential ordering',memory:'memory recall'};const p=`Player finished a mobile reaction game. Score=${S.score}, correct=${S.correct}, misses=${S.wrong}, best combo=x${S.bestCombo}, mode=${mn[S.mode]}. Write ONE punchy coaching tip, max 18 words. Be specific and a bit savage, end motivating. No emoji.`;try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:80,messages:[{role:'user',content:p}]})});const d=await r.json();box.textContent=d.content?.[0]?.text||'Decent run. Now do it faster.';}catch(e){const f=['Combos are free points — stop resetting them.','Accuracy first, speed second. Always.','That miss cost more than you think.','You have the instincts. Now trust them.'];box.textContent=f[Math.floor(Math.random()*f.length)];}}
 </script>
 </body>
